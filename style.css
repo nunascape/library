@@ -1,0 +1,95 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #050505;
+  color: #f4f4f4;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  min-height: 100vh;
+}
+
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 1.25rem 2rem;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.mark {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  font-size: 1.05rem;
+}
+
+.mark span {
+  color: #888;
+  font-weight: 400;
+}
+
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+nav a {
+  color: #888;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.72rem;
+}
+
+nav a:hover,
+nav a.active {
+  color: #fff;
+}
+
+main {
+  max-width: 720px;
+  padding: 4rem 2rem;
+}
+
+.kicker {
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  font-size: 0.68rem;
+  color: #777;
+  margin-bottom: 0.75rem;
+}
+
+h1 {
+  font-size: clamp(2.4rem, 6vw, 4.2rem);
+  letter-spacing: -0.05em;
+  line-height: 0.95;
+  margin-bottom: 1rem;
+}
+
+.lede {
+  color: #bdbdbd;
+  max-width: 36em;
+  line-height: 1.5;
+  margin-bottom: 3rem;
+}
+
+.index-list a {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-top: 1px solid #2a2a2a;
+  color: #fff;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.85rem;
+}
+
+.index-list a:last-child { border-bottom: 1px solid #2a2a2a; }
+.index-list span { color: #555; }
+
+@media (max-width: 700px) {
+  .site-header { flex-direction: column; align-items: flex-start; }
+}
