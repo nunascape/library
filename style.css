@@ -1,95 +1,251 @@
-* { box-sizing: border-box; margin: 0; padding: 0; }
+/* ==================================================================
+   library.nunascape.com — style.css
+   The whole look lives in the two token blocks below. They are the
+   current values, not fixed rules: change a token here and every page
+   follows. The reasoning behind them is in docs/STYLE.md.
 
-body {
-  background: #050505;
-  color: #f4f4f4;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  min-height: 100vh;
+   Theme: a checkbox (#paper) sits first in <body>; everything after it
+   is a sibling, so the White/Black switch works without JavaScript.
+   ================================================================== */
+
+/* ---------- tokens: Black (default) ---------- */
+:root,
+.site{
+  --ground:#060708;  --ground-ix:#08090A; --plate:#0E1214;
+  --ink:#E7EBEC;     --bright:#F4F6F6;    --soft:#9AA4A8;
+  --rule:#232B2E;    --pale:#C9D2D4;      --ac:#4FB8AE;
+
+  --serif:"Iowan Old Style",Palatino,"Palatino Linotype",Georgia,serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --display:"Cormorant Garamond","Iowan Old Style",Palatino,Georgia,serif;
+  --wm-a:linear-gradient(180deg,#17837d,#7f72cf);
 }
 
-.site-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 2rem;
-  padding: 1.25rem 2rem;
-  border-bottom: 1px solid #2a2a2a;
+/* ---------- tokens: Newsprint ---------- */
+#paper:checked ~ .site{
+  --ground:#E9E6DE;  --ground-ix:#E9E6DE; --plate:#F4F2EC;
+  --ink:#1A1916;     --bright:#0F0E0C;    --soft:#5A574E;
+  --rule:#C9C4B8;    --pale:#1A1916;      --ac:#17837D;
+}
+html:has(#paper:checked),
+html:has(#paper:checked) body{background:#E9E6DE}   /* overscroll colour */
+
+/* ---------- base ---------- */
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px); background:#060708}
+body{margin:0; background:#060708}
+.site{
+  min-height:100vh; background:var(--ground); color:var(--ink);
+  font-family:var(--serif); font-size:17px; line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+.site ::selection{background:rgba(79,184,174,.25)}
+a{color:inherit}
+img,svg{max-width:100%}
+table{width:100%; border-collapse:collapse; font-size:15px}
+pre,code{font-family:var(--mono); font-size:13px}
+pre{overflow-x:auto}
+.scroll{overflow-x:auto}
+:focus-visible{outline:2px solid var(--ac); outline-offset:2px}
+
+/* the theme checkbox: present, focusable, invisible */
+.theme-chk{position:absolute; width:1px; height:1px; margin:0; padding:0;
+  clip:rect(0 0 0 0); clip-path:inset(50%); overflow:hidden; white-space:nowrap}
+
+/* page widths */
+main{margin:0 auto; padding:3.5rem 1.4rem 6rem; max-width:46rem}
+main.is-wide{max-width:none; padding:0}
+
+/* shared label voice */
+.label{font-family:var(--mono); font-size:10px; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--soft)}
+
+/* the wordmark: Cormorant 300, the a running teal to lavender */
+.wm{font-family:var(--display); font-weight:300; letter-spacing:.01em;
+  color:var(--bright); line-height:1}
+.wm-a{background:var(--wm-a); -webkit-background-clip:text; background-clip:text;
+  color:transparent; -webkit-text-fill-color:transparent}
+
+/* ==================================================================
+   HEADER  (#nuna-nav)
+   A centred masthead: the solid tile is the black/newsprint switch,
+   LIBRARY is the link home, the prismatic tile leads out to the surface.
+   ================================================================== */
+#nuna-nav{background:var(--ground-ix); color:var(--ink);
+  border-bottom:1px solid var(--rule);
+  display:flex; flex-direction:column; align-items:center; padding:26px 48px 0}
+#nuna-nav .nh-sr{position:absolute; width:1px; height:1px; overflow:hidden;
+  clip:rect(0 0 0 0); clip-path:inset(50%); white-space:nowrap}
+
+#nuna-nav .nh-mast{display:flex; flex-direction:column; align-items:center;
+  gap:14px; padding:6px 0 22px}
+#nuna-nav .nh-switch{display:block; line-height:0; padding:6px; cursor:pointer;
+  color:var(--bright); transition:transform .18s, opacity .18s}
+#nuna-nav .nh-switch:hover{transform:translateY(-2px); opacity:.82}
+#nuna-nav .nh-tile{display:block; width:23px; height:35px}
+#paper:focus-visible ~ .site #nuna-nav .nh-switch{outline:2px solid var(--ac); outline-offset:3px}
+#nuna-nav .nh-word{font-family:var(--display); font-weight:300; font-size:64px;
+  line-height:1; letter-spacing:.08em; color:var(--bright); text-decoration:none}
+
+#nuna-nav .nh-bar{width:100%; border-top:1px solid var(--rule); height:58px;
+  display:flex; justify-content:center; align-items:center}
+#nuna-nav .nh-tabs{display:flex; justify-content:center; align-items:center; gap:44px}
+#nuna-nav .nh-tab{height:44px; display:flex; align-items:center; padding:0 4px;
+  text-decoration:none; color:var(--soft); font-family:var(--serif);
+  font-size:14px; letter-spacing:.16em; text-transform:uppercase;
+  transition:color .18s}
+#nuna-nav .nh-tab:hover{color:var(--ink)}
+
+/* active tab — stamped by build.py as data-section on <html>, no JS */
+html[data-section="home"]     #nuna-nav .nh-tab[data-tab="home"],
+html[data-section="paint"]    #nuna-nav .nh-tab[data-tab="paint"],
+html[data-section="games"]    #nuna-nav .nh-tab[data-tab="games"],
+html[data-section="shapes"]   #nuna-nav .nh-tab[data-tab="shapes"],
+html[data-section="patterns"] #nuna-nav .nh-tab[data-tab="patterns"]{color:var(--bright)}
+
+/* the way out to the surface, sitting with the tabs */
+#nuna-nav .nh-out{display:flex; align-items:center; height:44px; padding:0 4px; line-height:0}
+#nuna-nav .nh-prism{display:block; width:18px; height:28px;
+  filter:hue-rotate(var(--prism, 0deg));
+  transition:filter .5s ease-out, transform .18s}
+#nuna-nav .nh-out:hover .nh-prism{transform:translateY(-2px)}
+/* with JavaScript off the tile still moves, just on hover */
+@media (hover:hover){
+  #nuna-nav .nh-out:hover .nh-prism{animation:prism-drift 5s ease-in-out infinite}
+}
+@keyframes prism-drift{0%{filter:hue-rotate(-14deg)}50%{filter:hue-rotate(14deg)}100%{filter:hue-rotate(-14deg)}}
+@media (prefers-reduced-motion:reduce){
+  #nuna-nav .nh-prism{transition:none; animation:none !important; filter:none}
 }
 
-.mark {
-  color: #fff;
-  text-decoration: none;
-  font-weight: 700;
-  letter-spacing: -0.04em;
-  font-size: 1.05rem;
+@media (max-width:760px){
+  #nuna-nav{padding:18px 18px 0}
+  #nuna-nav .nh-mast{gap:10px; padding:8px 0 16px}
+  #nuna-nav .nh-word{font-size:40px}
+  #nuna-nav .nh-tile{width:19px; height:29px}
+  #nuna-nav .nh-bar{height:auto; padding-bottom:4px}
+  #nuna-nav .nh-tabs{gap:0; justify-content:flex-start; overflow-x:auto;
+    -webkit-overflow-scrolling:touch}
+  #nuna-nav .nh-tab{padding:0 10px; white-space:nowrap; font-size:13px}
 }
 
-.mark span {
-  color: #888;
-  font-weight: 400;
+/* ==================================================================
+   FOOTER
+   ================================================================== */
+#nuna-foot{border-top:1px solid var(--rule); padding:2rem 1.4rem 3rem;
+  color:var(--soft); font-family:var(--mono); font-size:10px;
+  letter-spacing:.16em; text-transform:uppercase; text-align:center}
+#nuna-foot a{color:var(--soft); text-decoration:none}
+#nuna-foot a:hover{color:var(--ac)}
+
+/* ==================================================================
+   LIBRARY HOME — a plain numbered index (.ix-*)
+   ================================================================== */
+.ix-shell{background:var(--ground-ix); padding:2.4rem 0 5rem}
+.ix-wrap{max-width:50rem; margin:0 auto; padding:0 1.6rem}
+
+.ix-sec{border-top:1px solid var(--rule)}
+.ix-sec:last-of-type{border-bottom:1px solid var(--rule)}
+.ix-sec > summary{list-style:none; cursor:pointer; display:grid;
+  grid-template-columns:2.4rem minmax(0,1fr) auto 1.8rem; align-items:baseline;
+  column-gap:1rem; padding:1.15rem 0}
+.ix-sec > summary::-webkit-details-marker{display:none}
+.ix-sec > summary:focus-visible{outline:2px solid var(--ac); outline-offset:3px}
+.ix-num{font-family:var(--mono); font-size:11px; letter-spacing:.14em; color:var(--soft)}
+.ix-sec[open] .ix-num{color:var(--ac)}
+.ix-name{font-size:1.18rem; color:var(--ink)}
+.ix-count{font-family:var(--mono); font-size:10px; letter-spacing:.14em; color:var(--soft)}
+.ix-x{position:relative; width:11px; height:11px; justify-self:end; align-self:center}
+.ix-x::before,.ix-x::after{content:""; position:absolute; background:var(--soft);
+  transition:transform .2s, opacity .2s}
+.ix-x::before{left:0; top:5px; width:11px; height:1px}
+.ix-x::after{left:5px; top:0; width:1px; height:11px}
+.ix-sec[open] .ix-x::after{transform:scaleY(0); opacity:0}
+.ix-sub{margin:0 0 .7rem; padding-left:3.4rem; max-width:34rem;
+  color:var(--soft); font-size:.96rem}
+
+.ix-rows{list-style:none; margin:0; padding:0 0 1.4rem}
+.ix-row{display:grid; grid-template-columns:3.4rem minmax(0,1fr) auto;
+  column-gap:1rem; align-items:baseline; padding:.62rem 0;
+  border-top:1px solid var(--rule)}
+.ix-row.is-dim .ix-title{color:var(--soft)}
+.ix-n{font-family:var(--mono); font-size:10.5px; letter-spacing:.1em; color:var(--soft)}
+.ix-title{display:block; font-size:1.04rem; line-height:1.35; color:var(--ink)}
+.ix-blurb{display:block; margin-top:.15rem; font-size:.92rem; color:var(--soft);
+  max-width:30rem}
+.ix-status{font-family:var(--mono); font-size:9px; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--soft); white-space:nowrap}
+.ix-status.is-live{color:var(--ac)}
+.ix-foot{margin:2.2rem 0 0; font-family:var(--mono); font-size:10px;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--soft)}
+
+@media (max-width:640px){
+  .ix-sec > summary{grid-template-columns:1.8rem minmax(0,1fr) 1.6rem;
+    column-gap:.7rem}
+  .ix-count{grid-column:2; grid-row:2}
+  .ix-sub{padding-left:2.5rem}
+  .ix-row{grid-template-columns:2.8rem minmax(0,1fr); row-gap:.25rem}
+  .ix-status{grid-column:2}
 }
 
-nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.5rem;
-}
 
-nav a {
-  color: #888;
-  text-decoration: none;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  font-size: 0.72rem;
-}
+/* ==================================================================
+   BOOK PAGES — six-slot anatomy
+   Claim · Construction · Proof · Note · Open questions · Checks
+   ================================================================== */
+.bk-head{display:grid; grid-template-columns:auto 1fr; column-gap:1.4rem;
+  align-items:end; padding-bottom:1.6rem; margin-bottom:2.2rem;
+  border-bottom:1px solid var(--rule)}
+.bk-head .nb-sym{width:64px; height:76px}
+.bk-crumb{display:block; margin-bottom:.4rem}
+.bk-crumb a{text-decoration:none}
+.bk-crumb a:hover{color:var(--ac)}
+.bk-head h1{margin:0; font-family:var(--display); font-weight:300; font-size:2.4rem;
+  line-height:1.05; color:var(--bright)}
 
-nav a:hover,
-nav a.active {
-  color: #fff;
-}
+.slot{margin:0 0 2.6rem}
+.slot > h2{margin:0 0 .8rem; font-family:var(--mono); font-weight:400; font-size:10px;
+  letter-spacing:.2em; text-transform:uppercase; color:var(--soft);
+  display:flex; gap:.9rem; align-items:baseline}
+.slot > h2::before{content:attr(data-n); color:var(--pale)}
+.slot p{margin:0 0 1rem}
+.slot-claim p{font-size:1.28rem; line-height:1.45; color:var(--bright)}
 
-main {
-  max-width: 720px;
-  padding: 4rem 2rem;
-}
+figure.fig{margin:1.4rem 0; padding:1.4rem; background:var(--plate);
+  border:1px solid var(--rule)}
+figure.fig svg{display:block; margin:0 auto; height:auto}
+figure.fig .ln{fill:none; stroke:var(--ink); stroke-width:1.2; vector-effect:non-scaling-stroke}
+figure.fig .fl{fill:var(--ink); fill-opacity:.08}
+figure.fig .hi{fill:none; stroke:var(--ac); stroke-width:1.6; vector-effect:non-scaling-stroke}
+figure.fig figcaption{margin-top:1rem; font-family:var(--mono); font-size:10px;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--soft)}
 
-.kicker {
-  text-transform: uppercase;
-  letter-spacing: 0.22em;
-  font-size: 0.68rem;
-  color: #777;
-  margin-bottom: 0.75rem;
-}
+/* Note: Aaron's slot. While empty it shows as scaffolding. */
+.slot-note.is-scaffold{border:1px dashed var(--rule); padding:1.1rem 1.2rem}
+.slot-note.is-scaffold p{color:var(--soft); font-style:italic; margin:0}
 
-h1 {
-  font-size: clamp(2.4rem, 6vw, 4.2rem);
-  letter-spacing: -0.05em;
-  line-height: 0.95;
-  margin-bottom: 1rem;
-}
+.checks{width:100%; font-size:14px}
+.checks th,.checks td{text-align:left; padding:.55rem .6rem .55rem 0;
+  border-top:1px solid var(--rule); vertical-align:top}
+.checks th{font-family:var(--mono); font-weight:400; font-size:9.5px;
+  letter-spacing:.16em; text-transform:uppercase; color:var(--soft)}
 
-.lede {
-  color: #bdbdbd;
-  max-width: 36em;
-  line-height: 1.5;
-  margin-bottom: 3rem;
-}
+/* stub pages (tabs not yet filled) */
+.stub h1{margin:0 0 .6rem; font-family:var(--display); font-weight:300;
+  font-size:2.6rem; line-height:1.05; color:var(--bright)}
+.stub p{color:var(--soft)}
 
-.index-list a {
-  display: flex;
-  gap: 1rem;
-  padding: 1rem 0;
-  border-top: 1px solid #2a2a2a;
-  color: #fff;
-  text-decoration: none;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  font-size: 0.85rem;
-}
-
-.index-list a:last-child { border-bottom: 1px solid #2a2a2a; }
-.index-list span { color: #555; }
-
-@media (max-width: 700px) {
-  .site-header { flex-direction: column; align-items: flex-start; }
+/* ---------- print: always paper, no chrome ---------- */
+@media print{
+  .site{--ground:#fff; --ground-ix:#fff; --plate:#fff; --ink:#000; --bright:#000;
+    --soft:#444; --rule:#bbb; --pale:#222; --ac:#000}
+  #nuna-nav .nh-prism{filter:none}
+  #nuna-nav,#nuna-foot{display:none}
+  .nb-shelf > summary{break-after:avoid}
+  .nb-row,.slot,figure.fig{break-inside:avoid}
 }

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" data-path="<!--PATH-->" data-section="<!--SECTION-->">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title><!--TITLE--> · nunascape library</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300&display=swap">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<input type="checkbox" id="paper" class="theme-chk" aria-label="White mode">
+<script>
+/* Optional: remembers White/Black between pages. The toggle works without it. */
+(function(){var c=document.getElementById('paper');try{c.checked=localStorage.getItem('nl-theme')==='white';
+c.addEventListener('change',function(){localStorage.setItem('nl-theme',c.checked?'white':'black')});}catch(e){}})();
+/* Optional: the prismatic tile drifts as the pointer moves. Decoration only. */
+(function(){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;var f;
+addEventListener('pointermove',function(e){if(f)return;f=requestAnimationFrame(function(){f=0;
+var x=e.clientX/innerWidth-0.5,y=e.clientY/innerHeight-0.5;
+document.documentElement.style.setProperty('--prism',((x*26)+(y*10)).toFixed(1)+'deg');});},{passive:true});})();
+</script>
+<div class="site">
+<!--HEADER-->
+<main class="<!--MAINCLASS-->">
+<!--BODY-->
+</main>
+<!--FOOTER-->
+</div>
+</body>
+</html>
